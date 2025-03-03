@@ -11,7 +11,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Builder
-@NoArgsConstructor @AllArgsConstructor
+@NoArgsConstructor
+@AllArgsConstructor
 @Data
 @Entity
 @Table(name = "pagamentos")
@@ -32,6 +33,6 @@ public class Pagamento {
     private BigDecimal valor;
 
     @Enumerated(EnumType.STRING)
-    private StatusPagamento statusPagamento;
+    private StatusPagamento status;
 
 }
