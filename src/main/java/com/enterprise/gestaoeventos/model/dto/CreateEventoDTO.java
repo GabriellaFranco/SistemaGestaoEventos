@@ -1,6 +1,7 @@
 package com.enterprise.gestaoeventos.model.dto;
 
 import com.enterprise.gestaoeventos.model.enuns.TipoEvento;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
@@ -23,9 +24,11 @@ public record CreateEventoDTO(
         String descricao,
 
         @NotNull @Future(message = "A data de início deve ser futura")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
         LocalDateTime dataInicio,
 
         @NotNull @Future(message = "A data de fim deve ser futura")
+        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd-MM-yyyy HH:mm")
         LocalDateTime dataFim,
 
         @NotNull @Size(min = 10, max = 100, message = "O local deve ter entre 20 e 100 caracteres")
