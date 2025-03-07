@@ -11,13 +11,10 @@ import org.springframework.stereotype.Component;
 @Component
 public class InscricaoMapper {
 
-    public Inscricao toInscricao(CreateInscricaoDTO inscricaoDTO, Evento evento, Pagamento pagamento, Usuario usuario) {
+    public Inscricao toInscricao(CreateInscricaoDTO inscricaoDTO) {
         return Inscricao.builder()
                 .dataInscricao(inscricaoDTO.dataInscricao())
                 .statusInscricao(inscricaoDTO.statusInscricao())
-                .evento(evento)
-                .pagamento(pagamento)
-                .usuario(usuario)
                 .build();
     }
 

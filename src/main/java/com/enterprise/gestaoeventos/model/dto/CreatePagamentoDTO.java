@@ -20,8 +20,6 @@ public record CreatePagamentoDTO(
         BigDecimal valor,
 
         @NotNull
-        StatusPagamento statusPagamento,
+        StatusPagamento statusPagamento
 
-        @NotNull
-        Long inscricaoId
 ) {}

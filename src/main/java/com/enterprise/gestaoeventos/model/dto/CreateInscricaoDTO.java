@@ -18,8 +18,13 @@ public record CreateInscricaoDTO(
         StatusInscricao statusInscricao,
 
         @NotNull
+        Long usuarioId,
+
+        @NotNull
         Long eventoId,
 
         @NotNull
         StatusPagamento statusPagamento
-) {}
+
+) {
+}

@@ -1,12 +1,10 @@
 package com.enterprise.gestaoeventos.controller;
 
 import com.enterprise.gestaoeventos.exception.ResourceNotFoundException;
-import com.enterprise.gestaoeventos.model.dto.CreateEventoDTO;
 import com.enterprise.gestaoeventos.model.dto.CreateUsuarioDTO;
 import com.enterprise.gestaoeventos.model.dto.GetUsuarioDTO;
 import com.enterprise.gestaoeventos.model.enuns.Role;
 import com.enterprise.gestaoeventos.service.UsuarioService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,9 +21,9 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
