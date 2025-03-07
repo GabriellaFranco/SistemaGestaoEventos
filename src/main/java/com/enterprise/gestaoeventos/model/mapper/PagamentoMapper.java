@@ -6,15 +6,16 @@ import com.enterprise.gestaoeventos.model.entity.Inscricao;
 import com.enterprise.gestaoeventos.model.entity.Pagamento;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
+
 @Component
 public class PagamentoMapper {
 
-    public Pagamento toPagamento(CreatePagamentoDTO pagamentoDTO, Inscricao inscricao) {
+    public Pagamento toPagamento(CreatePagamentoDTO pagamentoDTO) {
         return Pagamento.builder()
                 .dataPagamento(pagamentoDTO.dataPagamento())
                 .status(pagamentoDTO.statusPagamento())
                 .valor(pagamentoDTO.valor())
-                .inscricao(inscricao)
                 .build();
     }
 

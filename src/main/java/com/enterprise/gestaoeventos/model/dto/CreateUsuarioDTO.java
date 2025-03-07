@@ -1,6 +1,7 @@
 package com.enterprise.gestaoeventos.model.dto;
 
 import com.enterprise.gestaoeventos.model.enuns.Role;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
