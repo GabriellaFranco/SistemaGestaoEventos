@@ -6,6 +6,7 @@ import com.enterprise.gestaoeventos.model.dto.GetUsuarioDTO;
 import com.enterprise.gestaoeventos.model.mapper.UsuarioMapper;
 import com.enterprise.gestaoeventos.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +16,7 @@ public class UsuarioService {
 
     private final UsuarioRepository repository;
     private final UsuarioMapper mapper;
+    private final PasswordEncoder encoder;
 
     public List<GetUsuarioDTO> getAllUsuarios() {
         return repository.findAll().stream().map(mapper::toGetUsuarioDTO).toList();
@@ -27,6 +29,8 @@ public class UsuarioService {
 
     public GetUsuarioDTO createUsuario(CreateUsuarioDTO usuarioDTO) {
         var usuarioMapped = mapper.toUsuario(usuarioDTO);
+        usuarioMapped.setSenha(encoder.encode(usuarioMapped.getSenha()));
+        usuarioMapped.setAtivo(true);
         repository.save(usuarioMapped);
         return mapper.toGetUsuarioDTO(usuarioMapped);
     }

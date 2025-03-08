@@ -1,5 +1,6 @@
 package com.enterprise.gestaoeventos.model.dto;
 
+import com.enterprise.gestaoeventos.model.entity.AtribuirPermissao;
 import com.enterprise.gestaoeventos.model.enuns.Role;
 import com.enterprise.gestaoeventos.model.enuns.StatusInscricao;
 import lombok.Builder;
@@ -14,9 +15,15 @@ public record GetUsuarioDTO(
         String nome,
         String senha,
         Role role,
+        List<AtribuirPermissaoDTO> permissoes,
         List<EventoDTO> eventosOrganizados,
         List<InscricaoDTO> inscricoes
 ) {
+
+    @Builder
+    public record AtribuirPermissaoDTO(
+            Role role
+    ) {}
 
     @Builder
     public record EventoDTO(
