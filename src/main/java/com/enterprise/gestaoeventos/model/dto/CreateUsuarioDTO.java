@@ -24,5 +24,8 @@ public record CreateUsuarioDTO(
         String senha,
 
         @NotNull
-        Role role
+        Role role,
+
+        @NotNull
+        Boolean ativo
 ) {}
