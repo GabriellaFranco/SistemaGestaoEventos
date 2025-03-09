@@ -46,7 +46,6 @@ public class UsuarioServiceTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("Liana@30")
-                .role(Role.PARTICIPANTE)
                 .build();
 
         getUsuarioDTO = GetUsuarioDTO.builder()
@@ -54,14 +53,14 @@ public class UsuarioServiceTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("Liana@30")
-                .role(Role.PARTICIPANTE)
+                .role(Role.ROLE_PARTICIPANTE)
                 .build();
 
         createUsuarioDTO = CreateUsuarioDTO.builder()
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("Liana@30")
-                .role(Role.PARTICIPANTE)
+                .role(Role.ROLE_PARTICIPANTE)
                 .build();
     }
 

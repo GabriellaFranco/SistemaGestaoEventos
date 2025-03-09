@@ -26,7 +26,7 @@ public class Pagamento {
     @JoinColumn(name = "inscricao_id", nullable = false, unique = true)
     private Inscricao inscricao;
 
-    @Column(nullable = false)
+    @Column(nullable = true)
     private LocalDateTime dataPagamento;
 
     @Column(nullable = false)
@@ -34,5 +34,9 @@ public class Pagamento {
 
     @Enumerated(EnumType.STRING)
     private StatusPagamento status;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id", nullable = false)
+    private Usuario usuario;
 
 }

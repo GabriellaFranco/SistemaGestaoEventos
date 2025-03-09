@@ -14,8 +14,7 @@ public record GetInscricaoDTO(
        LocalDateTime dataInscricao,
        StatusInscricao statusInscricao,
        UsuarioDTO usuario,
-       EventoDTO evento,
-       PagamentoDTO pagamento
+       EventoDTO evento
 ) {
 
     @Builder
@@ -31,11 +30,4 @@ public record GetInscricaoDTO(
             LocalDateTime dataFim
     ) {}
 
-    @Builder
-    public record PagamentoDTO(
-            Long id,
-            BigDecimal valor,
-            StatusPagamento statusPagamento,
-            LocalDateTime dataPagamento
-    ) {}
 }

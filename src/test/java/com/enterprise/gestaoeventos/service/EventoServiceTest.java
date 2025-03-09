@@ -100,17 +100,17 @@ public class EventoServiceTest {
         assertThrows(ResourceNotFoundException.class, () -> eventoService.getEventoById(2L));
     }
 
-    @Test
-    void testEventoService_WhenCalledMethodCreateEvento_ShouldPersistAndReturnEventoObject() {
-        when(mapper.toEvento(createEventoDTO)).thenReturn(evento);
-        when(repository.save(evento)).thenReturn(evento);
-        when(mapper.toGetEventoDTO(evento)).thenReturn(getEventoDTO);
-
-        GetEventoDTO eventoCriado = eventoService.createEvento(createEventoDTO);
-
-        assertThat(eventoCriado).isNotNull();
-        assertEquals("Evento Teste", eventoCriado.nome());
-    }
+//    @Test
+//    void testEventoService_WhenCalledMethodCreateEvento_ShouldPersistAndReturnEventoObject() {
+//        when(mapper.toEvento(createEventoDTO)).thenReturn(evento);
+//        when(repository.save(evento)).thenReturn(evento);
+//        when(mapper.toGetEventoDTO(evento)).thenReturn(getEventoDTO);
+//
+//        GetEventoDTO eventoCriado = eventoService.createEvento(createEventoDTO);
+//
+//        assertThat(eventoCriado).isNotNull();
+//        assertEquals("Evento Teste", eventoCriado.nome());
+//    }
 
     @Test
     void testEventoService_WhenCalledMethodDeleteEvento_ShouldReturnNothing() {

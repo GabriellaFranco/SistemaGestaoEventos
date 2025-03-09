@@ -11,6 +11,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Builder
@@ -51,6 +52,9 @@ public class Evento {
     private Usuario organizador;
 
     @OneToMany(mappedBy = "evento", cascade = CascadeType.ALL)
-    private List<Inscricao> inscricoes;
+    @Builder.Default
+    private List<Inscricao> inscricoes = new ArrayList<>();
+
+
 
 }

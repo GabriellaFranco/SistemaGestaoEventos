@@ -5,6 +5,7 @@ import com.enterprise.gestaoeventos.model.dto.CreateEventoDTO;
 import com.enterprise.gestaoeventos.model.dto.GetEventoDTO;
 import com.enterprise.gestaoeventos.model.mapper.EventoMapper;
 import com.enterprise.gestaoeventos.repository.EventoRepository;
+import com.enterprise.gestaoeventos.repository.UsuarioRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -14,6 +15,7 @@ import java.util.List;
 public class EventoService {
 
     private final EventoRepository repository;
+    private final UsuarioRepository usuarioRepository;
     private final EventoMapper mapper;
 
     public List<GetEventoDTO> getAllEventos() {
@@ -25,8 +27,11 @@ public class EventoService {
                 .orElseThrow(() -> new ResourceNotFoundException("Evento não encontrado no Sistema: " + id));
     }
 
-    public GetEventoDTO createEvento(CreateEventoDTO eventoDTO) {
-        var eventoMapped = mapper.toEvento(eventoDTO);
+    public GetEventoDTO createEvento(CreateEventoDTO eventoDTO, String usuarioEmail) {
+        var organizador = usuarioRepository.findByEmail(usuarioEmail)
+                .orElseThrow(() -> new ResourceNotFoundException("Usuário não encontrado no sistema: " + usuarioEmail));
+
+        var eventoMapped = mapper.toEvento(eventoDTO, organizador);
         repository.save(eventoMapped);
         return mapper.toGetEventoDTO(eventoMapped);
     }

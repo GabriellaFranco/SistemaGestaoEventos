@@ -3,12 +3,13 @@ package com.enterprise.gestaoeventos.model.mapper;
 import com.enterprise.gestaoeventos.model.dto.CreateEventoDTO;
 import com.enterprise.gestaoeventos.model.dto.GetEventoDTO;
 import com.enterprise.gestaoeventos.model.entity.Evento;
+import com.enterprise.gestaoeventos.model.entity.Usuario;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventoMapper {
 
-    public Evento toEvento(CreateEventoDTO eventoDTO) {
+    public Evento toEvento(CreateEventoDTO eventoDTO, Usuario organizador) {
         return Evento.builder()
                 .nome(eventoDTO.nome())
                 .tipoEvento(eventoDTO.tipoEvento())
@@ -16,6 +17,7 @@ public class EventoMapper {
                 .dataFim(eventoDTO.dataFim())
                 .local(eventoDTO.local())
                 .descricao(eventoDTO.descricao())
+                .organizador(organizador)
                 .capacidadeMaxima(eventoDTO.capacidadeMaxima())
                 .build();
     }
