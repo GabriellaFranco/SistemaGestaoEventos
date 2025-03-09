@@ -23,6 +23,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -50,12 +51,6 @@ public class InscricaoControllerTest {
                 .id(1L)
                 .dataInscricao(LocalDateTime.now())
                 .statusInscricao(StatusInscricao.PENDENTE)
-                .pagamento(GetInscricaoDTO.PagamentoDTO.builder()
-                        .id(1L)
-                        .valor(new BigDecimal(20))
-                        .dataPagamento(LocalDateTime.now())
-                        .statusPagamento(StatusPagamento.PENDENTE)
-                        .build())
                 .evento(GetInscricaoDTO.EventoDTO.builder()
                         .nome("Teste")
                         .dataInicio(LocalDateTime.now().plusDays(1))
@@ -71,12 +66,6 @@ public class InscricaoControllerTest {
                 .id(2L)
                 .dataInscricao(LocalDateTime.now())
                 .statusInscricao(StatusInscricao.CONFIRMADA)
-                .pagamento(GetInscricaoDTO.PagamentoDTO.builder()
-                        .id(2L)
-                        .valor(new BigDecimal(40))
-                        .dataPagamento(LocalDateTime.now())
-                        .statusPagamento(StatusPagamento.APROVADO)
-                        .build())
                 .evento(GetInscricaoDTO.EventoDTO.builder()
                         .nome("Teste")
                         .dataInicio(LocalDateTime.now().plusDays(1))
@@ -125,63 +114,43 @@ public class InscricaoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    void testInscricaoController_WhenCalledCreateInscricao_ShouldPersistAndReturnInscricaoObject() throws Exception {
-//
-//        var createDto = CreateInscricaoDTO.builder()
-//                .dataInscricao(LocalDateTime.now().plusMinutes(1))
-//                .statusInscricao(StatusInscricao.PENDENTE)
-//                .usuarioId(1L)
-//                .eventoId(1L)
-//                .statusPagamento(StatusPagamento.PENDENTE)
-//                .build();
-//
-//        var inscricaoCriada = GetInscricaoDTO.builder()
-//                .dataInscricao(LocalDateTime.now())
-//                .statusInscricao(StatusInscricao.CONFIRMADA)
-//                .pagamento(GetInscricaoDTO.PagamentoDTO.builder()
-//                        .id(2L)
-//                        .valor(new BigDecimal(40))
-//                        .dataPagamento(LocalDateTime.now())
-//                        .statusPagamento(StatusPagamento.APROVADO)
-//                        .build())
-//                .evento(GetInscricaoDTO.EventoDTO.builder()
-//                        .nome("Teste")
-//                        .dataInicio(LocalDateTime.now().plusDays(1))
-//                        .dataFim(LocalDateTime.now().plusDays(4))
-//                        .build())
-//                .usuario(GetInscricaoDTO.UsuarioDTO.builder()
-//                        .id(1L)
-//                        .nome("Gabriella")
-//                        .build())
-//                .build();
-//
-//        when(inscricaoService.createInscricao(any())).thenReturn(inscricaoCriada);
-//
-//        mockMvc.perform(post("/inscricoes")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(createDto)))
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.usuario.nome").value("Gabriella"));
-//    }
-//
-//    @Test
-//    void testInscricaoController_WhenCalledCreateInscricaoWithoutStatusPagamento_ShouldReturnBadRequest() throws Exception {
-//        var createDto = CreateInscricaoDTO.builder()
-//                .dataInscricao(LocalDateTime.now().plusMinutes(1))
-//                .statusInscricao(StatusInscricao.PENDENTE)
-//                .usuarioId(1L)
-//                .eventoId(1L)
-//                .build();
-//
-//        var inscricaoCriado = inscricaoService.createInscricao(createDto);
-//
-//        mockMvc.perform(post("/inscricoes")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(createDto)))
-//                .andExpect(status().isBadRequest());
-//    }
+    @Test
+    void testInscricaoController_WhenCalledCreateInscricao_ShouldPersistAndReturnInscricaoObject() throws Exception {
+
+        var createDto = CreateInscricaoDTO.builder()
+                .usuarioId(1L)
+                .eventoId(1L)
+                .build();
+
+        var inscricaoCriada = GetInscricaoDTO.builder()
+                .dataInscricao(LocalDateTime.now())
+                .statusInscricao(StatusInscricao.CONFIRMADA)
+                .build();
+
+        when(inscricaoService.createInscricao(any(), anyString())).thenReturn(inscricaoCriada);
+
+        mockMvc.perform(post("/inscricoes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDto)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.usuario.nome").value("Gabriella"));
+    }
+
+    @Test
+    void testInscricaoController_WhenCalledCreateInscricaoWithoutStatusPagamento_ShouldReturnBadRequest() throws Exception {
+        var createDto = CreateInscricaoDTO.builder()
+                .usuarioId(1L)
+                .eventoId(1L)
+                .build();
+
+        var inscricaoCriado = inscricaoService.createInscricao(createDto, anyString());
+
+        mockMvc.perform(post("/inscricoes")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDto)))
+                .andExpect(status().isBadRequest());
+    }
 
     @Test
     void testInscricaoController_WhenCalledDeleteInscricao_ShouldReturnSuccessMessage() throws Exception {

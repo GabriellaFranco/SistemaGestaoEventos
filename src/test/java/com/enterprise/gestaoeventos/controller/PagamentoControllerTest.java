@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -102,50 +103,47 @@ public class PagamentoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    void testPagamentoController_WhenCalledCreatePagamento_ShouldPersistAndReturnPagamentoObject() throws Exception {
-//        var createDto = CreatePagamentoDTO.builder()
-//                .dataPagamento(LocalDateTime.now().plusMinutes(1))
-//                .statusPagamento(StatusPagamento.PENDENTE)
-//                .valor(new BigDecimal(30))
-//                .build();
-//
-//        var pagamentoCriado = GetPagamentoDTO.builder()
-//                .id(3L)
-//                .dataPagamento(LocalDateTime.now())
-//                .statusPagamento(StatusPagamento.PENDENTE)
-//                .inscricao(GetPagamentoDTO.InscricaoDTO.builder()
-//                        .id(1L)
-//                        .statusInscricao(StatusInscricao.PENDENTE)
-//                        .build())
-//                .valor(new BigDecimal(10))
-//                .build();
-//
-//        when(pagamentoService.createPagamento(createDto)).thenReturn(pagamentoCriado);
-//
-//        mockMvc.perform(post("/pagamentos")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(createDto)))
-//                .andDo(print())
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.valor").value(10));
-//
-//    }
-//    @Test
-//    void testPagamentoController_WhenCalledCreatePagamentoWithoutValor_ShouldReturnBadRequest() throws Exception {
-//        var createDto = CreatePagamentoDTO.builder()
-//                .dataPagamento(LocalDateTime.now().plusMinutes(1))
-//                .statusPagamento(StatusPagamento.PENDENTE)
-//                .build();
-//
-//        pagamentoService.createPagamento(createDto);
-//
-//        mockMvc.perform(post("/pagamentos")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(createDto)))
-//                .andExpect(status().isBadRequest());
-//
-//    }
+    @Test
+    void testPagamentoController_WhenCalledCreatePagamento_ShouldPersistAndReturnPagamentoObject() throws Exception {
+        var createDto = CreatePagamentoDTO.builder()
+                .valor(new BigDecimal(30))
+                .build();
+
+        var pagamentoCriado = GetPagamentoDTO.builder()
+                .id(3L)
+                .dataPagamento(LocalDateTime.now())
+                .statusPagamento(StatusPagamento.PENDENTE)
+                .inscricao(GetPagamentoDTO.InscricaoDTO.builder()
+                        .id(1L)
+                        .statusInscricao(StatusInscricao.PENDENTE)
+                        .build())
+                .valor(new BigDecimal(10))
+                .build();
+
+        when(pagamentoService.createPagamento(createDto, anyString())).thenReturn(pagamentoCriado);
+
+        mockMvc.perform(post("/pagamentos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDto)))
+                .andDo(print())
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.valor").value(10));
+
+    }
+    @Test
+    void testPagamentoController_WhenCalledCreatePagamentoWithoutValor_ShouldReturnBadRequest() throws Exception {
+        var createDto = CreatePagamentoDTO.builder()
+                .valor(new BigDecimal(30))
+                .build();
+
+        pagamentoService.createPagamento(createDto, anyString());
+
+        mockMvc.perform(post("/pagamentos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDto)))
+                .andExpect(status().isBadRequest());
+
+    }
 
     @Test
     void testPagamentoController_WhenCalledDeletePagamento_ReturnSuccessMessage() throws Exception {

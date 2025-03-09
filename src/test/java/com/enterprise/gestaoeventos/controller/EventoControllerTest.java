@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -21,6 +22,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -67,6 +69,7 @@ public class EventoControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "user@email.com", roles = {"ADMIN"})
     void testEventoController_WhenCalledGetAllEventos_ShouldReturnListOfEventoObject() throws Exception {
         when(eventoService.getAllEventos()).thenReturn(List.of(evento1, evento2));
 
@@ -102,37 +105,37 @@ public class EventoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-//    @Test
-//    void testEventoController_WhenCalledCreateEvento_ShouldSaveAndReturnEventoObject() throws Exception {
-//
-//        var createDTO = CreateEventoDTO.builder()
-//                .nome("Novo Evento")
-//                .descricao("Descrição do evento que acontecerá")
-//                .local("Local do evento")
-//                .dataInicio(LocalDateTime.now().plusDays(10))
-//                .dataFim(LocalDateTime.now().plusDays(11))
-//                .tipoEvento(TipoEvento.ARTES)
-//                .capacidadeMaxima(800)
-//                .build();
-//
-//        var eventoCriado = GetEventoDTO.builder()
-//                .nome("Novo Evento")
-//                .descricao("Descrição do evento que acontecerá")
-//                .local("Local do evento")
-//                .dataInicio(LocalDateTime.now().plusDays(3))
-//                .dataFim(LocalDateTime.now().plusDays(5))
-//                .tipoEvento(TipoEvento.TECNOLOGIA)
-//                .capacidadeMaxima(800)
-//                .build();
-//
-//        when(eventoService.createEvento(any())).thenReturn(eventoCriado);
-//
-//        mockMvc.perform(post("/eventos")
-//                        .contentType(MediaType.APPLICATION_JSON)
-//                        .content(objectMapper.writeValueAsString(createDTO)))
-//                .andExpect(status().isCreated())
-//                .andExpect(jsonPath("$.nome").value("Novo Evento"));
-//    }
+    @Test
+    void testEventoController_WhenCalledCreateEvento_ShouldSaveAndReturnEventoObject() throws Exception {
+
+        var createDTO = CreateEventoDTO.builder()
+                .nome("Novo Evento")
+                .descricao("Descrição do evento que acontecerá")
+                .local("Local do evento")
+                .dataInicio(LocalDateTime.now().plusDays(10))
+                .dataFim(LocalDateTime.now().plusDays(11))
+                .tipoEvento(TipoEvento.ARTES)
+                .capacidadeMaxima(800)
+                .build();
+
+        var eventoCriado = GetEventoDTO.builder()
+                .nome("Novo Evento")
+                .descricao("Descrição do evento que acontecerá")
+                .local("Local do evento")
+                .dataInicio(LocalDateTime.now().plusDays(3))
+                .dataFim(LocalDateTime.now().plusDays(5))
+                .tipoEvento(TipoEvento.TECNOLOGIA)
+                .capacidadeMaxima(800)
+                .build();
+
+        when(eventoService.createEvento(any(), anyString())).thenReturn(eventoCriado);
+
+        mockMvc.perform(post("/eventos")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(createDTO)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.nome").value("Novo Evento"));
+    }
 
     @Test
     void testEventoController_WhenCalledCreateEventoWithoutDataInicio_ShouldReturnBadRequest() throws Exception {
