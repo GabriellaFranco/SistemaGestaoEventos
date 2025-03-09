@@ -13,14 +13,8 @@ import java.time.LocalDateTime;
 @Builder
 public record CreatePagamentoDTO(
 
-        @Nullable @FutureOrPresent(message = "Data de pagamento inválida")
-        LocalDateTime dataPagamento,
-
         @NotNull @Positive(message = "Valor informado inválido")
         BigDecimal valor,
-
-        @NotNull
-        StatusPagamento statusPagamento,
 
         @NotNull
         Long inscricaoId

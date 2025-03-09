@@ -15,8 +15,6 @@ public class PagamentoMapper {
 
     public Pagamento toPagamento(CreatePagamentoDTO pagamentoDTO, Inscricao inscricao, Usuario usuario) {
         return Pagamento.builder()
-                .dataPagamento(pagamentoDTO.dataPagamento())
-                .status(pagamentoDTO.statusPagamento())
                 .inscricao(inscricao)
                 .usuario(usuario)
                 .valor(pagamentoDTO.valor())
