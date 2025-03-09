@@ -45,7 +45,6 @@ public class UsuarioRepositoryTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         assertThat(usuario).isNotNull();
@@ -57,7 +56,6 @@ public class UsuarioRepositoryTest {
         Usuario usuario = Usuario.builder()
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build();
 
         assertThrows(DataIntegrityViolationException.class, () -> repository.save(usuario));
@@ -70,7 +68,6 @@ public class UsuarioRepositoryTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         repository.delete(usuario);
@@ -85,7 +82,6 @@ public class UsuarioRepositoryTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         Optional<Usuario> usuarioEncontrado = repository.findById(usuario.getId());
@@ -100,7 +96,6 @@ public class UsuarioRepositoryTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         Optional<Usuario> usuarioEncontrado = repository.findByEmail(usuario.getEmail());
@@ -115,14 +110,12 @@ public class UsuarioRepositoryTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         Usuario usuario2 = repository.save(Usuario.builder()
                 .nome("Gabriella")
                 .email("gabriella@gmail.com")
                 .senha("gabi2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         List<Usuario> usuarios = repository.findAll();

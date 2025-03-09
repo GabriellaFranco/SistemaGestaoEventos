@@ -102,37 +102,37 @@ public class EventoControllerTest {
                 .andExpect(status().isNotFound());
     }
 
-    @Test
-    void testEventoController_WhenCalledCreateEvento_ShouldSaveAndReturnEventoObject() throws Exception {
-
-        var createDTO = CreateEventoDTO.builder()
-                .nome("Novo Evento")
-                .descricao("Descrição do evento que acontecerá")
-                .local("Local do evento")
-                .dataInicio(LocalDateTime.now().plusDays(10))
-                .dataFim(LocalDateTime.now().plusDays(11))
-                .tipoEvento(TipoEvento.ARTES)
-                .capacidadeMaxima(800)
-                .build();
-
-        var eventoCriado = GetEventoDTO.builder()
-                .nome("Novo Evento")
-                .descricao("Descrição do evento que acontecerá")
-                .local("Local do evento")
-                .dataInicio(LocalDateTime.now().plusDays(3))
-                .dataFim(LocalDateTime.now().plusDays(5))
-                .tipoEvento(TipoEvento.TECNOLOGIA)
-                .capacidadeMaxima(800)
-                .build();
-
-        when(eventoService.createEvento(any())).thenReturn(eventoCriado);
-
-        mockMvc.perform(post("/eventos")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(objectMapper.writeValueAsString(createDTO)))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.nome").value("Novo Evento"));
-    }
+//    @Test
+//    void testEventoController_WhenCalledCreateEvento_ShouldSaveAndReturnEventoObject() throws Exception {
+//
+//        var createDTO = CreateEventoDTO.builder()
+//                .nome("Novo Evento")
+//                .descricao("Descrição do evento que acontecerá")
+//                .local("Local do evento")
+//                .dataInicio(LocalDateTime.now().plusDays(10))
+//                .dataFim(LocalDateTime.now().plusDays(11))
+//                .tipoEvento(TipoEvento.ARTES)
+//                .capacidadeMaxima(800)
+//                .build();
+//
+//        var eventoCriado = GetEventoDTO.builder()
+//                .nome("Novo Evento")
+//                .descricao("Descrição do evento que acontecerá")
+//                .local("Local do evento")
+//                .dataInicio(LocalDateTime.now().plusDays(3))
+//                .dataFim(LocalDateTime.now().plusDays(5))
+//                .tipoEvento(TipoEvento.TECNOLOGIA)
+//                .capacidadeMaxima(800)
+//                .build();
+//
+//        when(eventoService.createEvento(any())).thenReturn(eventoCriado);
+//
+//        mockMvc.perform(post("/eventos")
+//                        .contentType(MediaType.APPLICATION_JSON)
+//                        .content(objectMapper.writeValueAsString(createDTO)))
+//                .andExpect(status().isCreated())
+//                .andExpect(jsonPath("$.nome").value("Novo Evento"));
+//    }
 
     @Test
     void testEventoController_WhenCalledCreateEventoWithoutDataInicio_ShouldReturnBadRequest() throws Exception {

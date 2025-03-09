@@ -1,7 +1,7 @@
 package com.enterprise.gestaoeventos.model.enuns;
 
 public enum Role {
-    ADMIN,
-    ORGANIZADOR,
-    PARTICIPANTE
+    ROLE_ADMIN,
+    ROLE_ORGANIZADOR,
+    ROLE_PARTICIPANTE
 }

@@ -69,7 +69,6 @@ public class InscricaoRepositoryTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("liana2077")
-                .role(Role.PARTICIPANTE)
                 .build());
 
         evento = eventoRepository.save(Evento.builder()

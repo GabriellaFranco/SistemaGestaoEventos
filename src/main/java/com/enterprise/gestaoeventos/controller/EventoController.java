@@ -7,6 +7,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -32,8 +34,10 @@ public class EventoController {
     }
 
     @PostMapping
-    public ResponseEntity<GetEventoDTO> createEvento(@RequestBody @Valid CreateEventoDTO eventoDTO) {
-        var eventoCriado = service.createEvento(eventoDTO);
+    public ResponseEntity<GetEventoDTO> createEvento(@RequestBody @Valid CreateEventoDTO eventoDTO,
+                                                     @AuthenticationPrincipal UserDetails userDetails) {
+
+        var eventoCriado = service.createEvento(eventoDTO, userDetails.getUsername());
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(eventoCriado.id()).toUri();
 

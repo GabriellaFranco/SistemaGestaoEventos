@@ -48,14 +48,14 @@ public class UsuarioControllerTest {
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("Liana@2077")
-                .role(Role.PARTICIPANTE)
+                .role(Role.ROLE_PARTICIPANTE)
                 .build();
 
         usuario2 = GetUsuarioDTO.builder()
                 .nome("Gabriella")
                 .email("gabriella@gmail.com")
                 .senha("Gabi@2077")
-                .role(Role.ORGANIZADOR)
+                .role(Role.ROLE_ORGANIZADOR)
                 .build();
     }
 
@@ -102,14 +102,14 @@ public class UsuarioControllerTest {
                 .nome("Cristiane")
                 .email("cristiane@gmail.com")
                 .senha("Cristiane@2077")
-                .role(Role.ADMIN)
+                .role(Role.ROLE_ADMIN)
                 .build();
 
         var usuarioCriado = GetUsuarioDTO.builder()
                 .nome("Liana")
                 .email("liana@gmail.com")
                 .senha("Liana@2077")
-                .role(Role.PARTICIPANTE)
+                .role(Role.ROLE_PARTICIPANTE)
                 .build();
 
         when(usuarioService.createUsuario(any())).thenReturn(usuarioCriado);
@@ -127,7 +127,7 @@ public class UsuarioControllerTest {
         var createDto = CreateUsuarioDTO.builder()
                 .nome("Cristiane")
                 .senha("Cristiane@2077")
-                .role(Role.ADMIN)
+                .role(Role.ROLE_ADMIN)
                 .build();
 
         mockMvc.perform(post("/usuarios")

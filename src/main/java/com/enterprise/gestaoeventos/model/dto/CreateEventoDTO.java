@@ -35,9 +35,6 @@ public record CreateEventoDTO(
         String local,
 
         @NotNull @Positive(message = "Número inválido")
-        int capacidadeMaxima,
-
-        @NotNull
-        Long organizador_id
+        int capacidadeMaxima
 
 ) {}

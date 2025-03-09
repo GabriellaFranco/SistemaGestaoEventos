@@ -13,7 +13,6 @@ public class UsuarioMapper {
                 .email(usuarioDTO.email())
                 .nome(usuarioDTO.nome())
                 .senha(usuarioDTO.senha())
-                .role(usuarioDTO.role())
                 .build();
     }
 
@@ -22,7 +21,6 @@ public class UsuarioMapper {
                 .email(usuario.getEmail())
                 .nome(usuario.getNome())
                 .senha(usuario.getSenha())
-                .role(usuario.getRole())
                 .permissoes(usuario.getPermissoes().stream().map(atribuirPermissao ->GetUsuarioDTO.AtribuirPermissaoDTO.builder()
                         .role(atribuirPermissao.getRole())
                         .build()).toList())

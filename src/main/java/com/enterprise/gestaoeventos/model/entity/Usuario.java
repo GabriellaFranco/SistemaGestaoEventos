@@ -33,9 +33,6 @@ public class Usuario {
     @Column(nullable = false)
     private String senha;
 
-    @Enumerated(EnumType.STRING)
-    private Role role;
-
     @Column(nullable = false)
     private boolean ativo;
 
@@ -50,5 +47,8 @@ public class Usuario {
 
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
     private List<Inscricao> inscricoes;
+
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.ALL)
+    private List<Pagamento> pagamentos = new ArrayList<>();
 
 }

@@ -6,6 +6,8 @@ import com.enterprise.gestaoeventos.service.InscricaoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -30,8 +32,10 @@ public class InscricaoController {
     }
 
     @PostMapping
-    public ResponseEntity<GetInscricaoDTO> createInscricao(@RequestBody @Valid CreateInscricaoDTO inscricaoDTO) {
-        var inscricao = service.createInscricao(inscricaoDTO);
+    public ResponseEntity<GetInscricaoDTO> createInscricao(@RequestBody @Valid CreateInscricaoDTO inscricaoDTO,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+
+        var inscricao = service.createInscricao(inscricaoDTO, userDetails.getUsername());
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(inscricao.id()).toUri();
         return ResponseEntity.created(uri).body(inscricao);

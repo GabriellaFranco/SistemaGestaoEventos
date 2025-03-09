@@ -16,28 +16,27 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.csrf.CookieCsrfTokenRepository;
+import org.springframework.security.web.csrf.CsrfTokenRepository;
 
 import javax.sql.DataSource;
-import java.util.List;
 
-@Configuration
-@RequiredArgsConstructor
+@Configuration @RequiredArgsConstructor
 @EnableWebSecurity
 public class SecurityConfig {
 
     private final DataSource dataSource;
 
     @Bean
-    public UserDetailsManager userDetailsManager() {
-        var jdbcManager = new JdbcUserDetailsManager(dataSource);
-        jdbcManager.setUsersByUsernameQuery("SELECT email AS username, senha AS password, ativo AS enabled FROM usuario WHERE email = ?");
-        jdbcManager.setAuthoritiesByUsernameQuery("""
-                SELECT usuario.email as username, permissao.role as authority 
-                FROM usuario usuario 
-                JOIN tb_permissao permissao ON permissao.usuario_id = usuario.id 
-                WHERE usuario.email = ?
-                """);
-        return jdbcManager;
+    public UserDetailsManager userDetailsManager(DataSource dataSource) {
+        var jdbcUserDetailsManager = new JdbcUserDetailsManager(dataSource);
+        jdbcUserDetailsManager.setUsersByUsernameQuery("SELECT email AS username, senha AS password, ativo AS enabled FROM usuario WHERE email = ?");
+        jdbcUserDetailsManager.setAuthoritiesByUsernameQuery(
+                "SELECT usuario.email as username, permissao.role as authority " +
+                        "FROM usuario usuario " +
+                        "JOIN tb_permissao permissao ON permissao.usuario_id = usuario.id " +
+                        "WHERE usuario.email = ?");
+        return jdbcUserDetailsManager;
     }
 
     @Bean
@@ -58,29 +57,30 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-        List<String> adminOrOrganizador = List.of("ADMIN", "ORGANIZADOR");
-        List<String> allRoles = List.of("ADMIN", "ORGANIZADOR", "PARTICIPANTE");
-
-        http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(HttpMethod.GET, "/usuarios/**", "/usuarios").hasAnyRole(adminOrOrganizador.toArray(String[]::new))
+        http
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf(csrfConfig -> csrfConfig.disable())
+                .authorizeHttpRequests(authorizeRequests -> authorizeRequests
+                        .requestMatchers(HttpMethod.GET, "/usuarios/**").hasAnyRole("ADMIN, ORGANIZADOR")
+                        .requestMatchers(HttpMethod.GET, "/usuarios").hasAnyRole("ADMIN, ORGANIZADOR")
                         .requestMatchers(HttpMethod.POST, "/usuarios").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAnyRole(adminOrOrganizador.toArray(String[]::new))
-
-                        .requestMatchers(HttpMethod.GET, "/eventos/**", "/eventos").hasAnyRole(allRoles.toArray(String[]::new))
-                        .requestMatchers(HttpMethod.POST, "/eventos", "/pagamentos").hasAnyRole("ADMIN", "ORGANIZADOR")
-                        .requestMatchers(HttpMethod.DELETE, "/eventos/**", "/pagamentos").hasRole("ADMIN")
-
-                        .requestMatchers(HttpMethod.GET, "/inscricoes/**", "/inscricoes").hasAnyRole(allRoles.toArray(String[]::new))
-                        .requestMatchers(HttpMethod.POST, "/inscricoes").hasAnyRole("ADMIN", "PARTICIPANTE")
-                        .requestMatchers(HttpMethod.DELETE, "/inscricoes/**").hasAnyRole("ADMIN", "PARTICIPANTE")
-
-                        .requestMatchers(HttpMethod.GET, "/pagamentos/**").hasAnyRole(allRoles.toArray(String[]::new))
-                        .requestMatchers(HttpMethod.GET, "/pagamentos").hasAnyRole(allRoles.toArray(String[]::new))
+                        .requestMatchers(HttpMethod.DELETE, "/usuarios/**").hasAnyRole("ADMIN, ORGANIZADOR")
+                        .requestMatchers(HttpMethod.GET,"/eventos/**").hasAnyRole("ADMIN", "ORGANIZADOR", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.GET,"/eventos").hasAnyRole("ADMIN", "ORGANIZADOR", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.POST,"/eventos").hasAnyRole("ADMIN", "ORGANIZADOR")
+                        .requestMatchers(HttpMethod.DELETE,"/eventos/**").hasAnyRole("ADMIN", "ORGANIZADOR")
+                        .requestMatchers(HttpMethod.GET,"/inscricoes/**").hasAnyRole("ADMIN", "ORGANIZADOR", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.GET,"/inscricoes/").hasAnyRole("ADMIN", "ORGANIZADOR", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.POST,"/inscricoes").hasAnyRole("ADMIN", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.DELETE,"/inscricoes/**").hasAnyRole("ADMIN", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.GET, "/pagamentos/**").hasAnyRole("ADMIN", "ORGANIZADOR", "PARTICIPANTE")
+                        .requestMatchers(HttpMethod.GET, "/pagamentos").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.POST, "/pagamentos").hasAnyRole("ADMIN", "ORGANIZADOR")
+                        .requestMatchers(HttpMethod.DELETE, "/pagamentos").hasRole("ADMIN")
                         .anyRequest().authenticated()
-                )
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .httpBasic(Customizer.withDefaults());
+                );
+
+        http.httpBasic(Customizer.withDefaults());
 
         return http.build();
     }

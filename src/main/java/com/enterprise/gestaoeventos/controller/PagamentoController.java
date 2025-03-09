@@ -6,6 +6,8 @@ import com.enterprise.gestaoeventos.service.PagamentoService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -30,8 +32,10 @@ public class PagamentoController {
     }
 
     @PostMapping
-    public ResponseEntity<GetPagamentoDTO> createPagamento(@RequestBody @Valid CreatePagamentoDTO pagamentoDTO) {
-        var pagamento = service.createPagamento(pagamentoDTO);
+    public ResponseEntity<GetPagamentoDTO> createPagamento(@RequestBody @Valid CreatePagamentoDTO pagamentoDTO,
+                                                           @AuthenticationPrincipal UserDetails userDetails) {
+
+        var pagamento = service.createPagamento(pagamentoDTO, userDetails.getUsername());
         URI uri = ServletUriComponentsBuilder
                 .fromCurrentRequest().path("/{id}").buildAndExpand(pagamento.id()).toUri();
         return ResponseEntity.created(uri).body(pagamento);

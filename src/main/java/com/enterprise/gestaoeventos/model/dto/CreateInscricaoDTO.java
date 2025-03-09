@@ -11,20 +11,11 @@ import java.time.LocalDateTime;
 @Builder
 public record CreateInscricaoDTO(
 
-        @NotNull @FutureOrPresent
-        LocalDateTime dataInscricao,
-
-        @NotNull
-        StatusInscricao statusInscricao,
-
         @NotNull
         Long usuarioId,
 
         @NotNull
-        Long eventoId,
-
-        @NotNull
-        StatusPagamento statusPagamento
+        Long eventoId
 
 ) {
 }
